@@ -2,3 +2,4 @@
 2024-06-22T09:31:41  feat(scan): memoize repeated lookups
 2024-07-21T16:48:48  test: trust, but verify
 2024-08-02T11:05:55  docs: standing on the shoulders of giants (garak, sigma, trufflehog)
+2024-08-13T18:22:02  build(scan): bump the dev toolchain
