@@ -4,3 +4,4 @@
 2024-08-02T11:05:55  docs: standing on the shoulders of giants (garak, sigma, trufflehog)
 2024-08-13T18:22:02  build(scan): bump the dev toolchain
 2024-09-12T13:39:09  build(format): make timestamps timezone-aware
+2024-09-23T08:56:16  docs(io): document the config keys
