@@ -9,3 +9,4 @@
 2024-11-03T10:30:30  ci(format): add --fail-on threshold handling
 2024-11-14T17:47:37  build(cache): add a JSON schema for output
 2024-12-14T12:04:44  docs(output): simplify the walker
+2024-12-25T19:21:51  docs(tests): add a --format json alias
