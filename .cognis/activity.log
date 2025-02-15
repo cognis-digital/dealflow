@@ -12,3 +12,4 @@
 2024-12-25T19:21:51  docs(tests): add a --format json alias
 2025-01-23T14:38:58  chore: BLACKBOOK redaction pass
 2025-02-04T09:55:05  test: trust, but verify
+2025-02-15T16:12:12  chore(tests): support stdin as a source
