@@ -14,3 +14,4 @@
 2025-02-04T09:55:05  test: trust, but verify
 2025-02-15T16:12:12  chore(tests): support stdin as a source
 2025-03-17T11:29:19  docs(deps): skip binary files by sniffing
+2025-03-28T18:46:26  style(core): extract the scorer
