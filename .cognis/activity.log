@@ -29,3 +29,4 @@
 2025-11-10T18:10:50  perf(report): add type hints to the public API
 2025-11-21T13:27:57  build(detect): guard against ReDoS in patterns
 2025-12-21T08:44:04  feat(scoring): add a regression fixture
+2026-01-01T15:01:11  test: add edge case
