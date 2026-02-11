@@ -31,3 +31,4 @@
 2025-12-21T08:44:04  feat(scoring): add a regression fixture
 2026-01-01T15:01:11  test: add edge case
 2026-01-12T10:18:18  chore: bump dev tooling
+2026-02-11T17:35:25  build(scoring): short-circuit on first critical
