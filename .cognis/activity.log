@@ -32,3 +32,4 @@
 2026-01-01T15:01:11  test: add edge case
 2026-01-12T10:18:18  chore: bump dev tooling
 2026-02-11T17:35:25  build(scoring): short-circuit on first critical
+2026-02-22T12:52:32  build(fixtures): trim whitespace in parsed fields
