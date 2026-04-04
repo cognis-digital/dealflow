@@ -34,3 +34,4 @@
 2026-02-11T17:35:25  build(scoring): short-circuit on first critical
 2026-02-22T12:52:32  build(fixtures): trim whitespace in parsed fields
 2026-03-24T19:09:39  docs(config): add color + severity icons
+2026-04-04T14:26:46  refactor(ci): tune severity weights
