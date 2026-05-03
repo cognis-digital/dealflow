@@ -1,0 +1,13 @@
+# B2B sales pipeline modeled as a state machine.
+name: B2B Sales
+stages:
+  - name: lead
+    type: open
+  - name: qualified
+    type: open
+  - name: proposal
+    type: open
+  - name: won
+    type: won
+  - name: lost
+    type: lost
