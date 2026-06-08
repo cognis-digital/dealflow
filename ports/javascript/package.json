@@ -1,0 +1,10 @@
+{
+  "name": "@cognis/dealflow",
+  "version": "0.2.0",
+  "description": "JavaScript port of dealflow (Cognis Neural Suite)",
+  "bin": {
+    "dealflow": "index.js"
+  },
+  "license": "LicenseRef-COCL-1.0",
+  "type": "module"
+}
