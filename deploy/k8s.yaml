@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: dealflow, labels: { app: dealflow } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: dealflow } }
+  template:
+    metadata: { labels: { app: dealflow } }
+    spec:
+      containers:
+        - name: dealflow
+          image: ghcr.io/cognis-digital/dealflow:latest
+          ports: [{ containerPort: 8000 }]
+          resources:
+            requests: { cpu: "50m", memory: "64Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: dealflow }
+spec:
+  selector: { app: dealflow }
+  ports: [{ port: 80, targetPort: 8000 }]
