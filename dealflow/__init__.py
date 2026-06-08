@@ -1,2 +1,11 @@
-"""DEALFLOW — Model your sales pipeline as a YAML state machine and compute conversion rates, stage velocity, and weighted forecast straight from CRM exports."""
-__version__ = "0.1.0"
+"""dealflow — part of the Cognis Neural Suite."""
+try:  # re-export the tool's public API + identity from core
+    from dealflow.core import *  # noqa: F401,F403
+except Exception:  # pragma: no cover
+    pass
+try:
+    from dealflow.core import TOOL_NAME, TOOL_VERSION
+except Exception:  # pragma: no cover
+    TOOL_NAME = "dealflow"
+    TOOL_VERSION = "0.1.0"
+__version__ = TOOL_VERSION
