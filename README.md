@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-dealflow
+pip install "git+https://github.com/cognis-digital/dealflow.git"
 dealflow scan .            # → prioritized findings in seconds
 ```
 
@@ -49,7 +49,7 @@ Pipeline-as-code: your forecast is a reproducible artifact in CI, so board decks
 ## Quick start
 
 ```bash
-pip install cognis-dealflow
+pip install "git+https://github.com/cognis-digital/dealflow.git"
 dealflow --version
 dealflow scan .                       # scan current project
 dealflow scan . --format json         # machine-readable
