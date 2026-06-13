@@ -20,6 +20,39 @@ pip install cognis-dealflow
 dealflow scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+1. Install the CLI (Python 3.9+):
+
+   ```bash
+   pip install dealflow       # or: pip install .   from a checkout
+   ```
+
+2. Forecast a pipeline — the `forecast` subcommand models a YAML pipeline state machine against a CSV deal event log and computes conversion, velocity, and a weighted forecast:
+
+   ```bash
+   dealflow forecast --pipeline pipeline.yml --deals deals.csv
+   ```
+
+3. Emit machine-readable output for piping / dashboards:
+
+   ```bash
+   dealflow forecast -p pipeline.yml -d deals.csv --format json | jq .weighted_forecast
+   ```
+
+4. Read the result via exit code — `0` success, `1` a gate failed, `2` usage/parse/data error. Apply CI gates on the forecast or win rate:
+
+   ```bash
+   dealflow forecast -p pipeline.yml -d deals.csv --min-forecast 100000 --min-win-rate 0.25
+   ```
+
+5. Run it as a reproducible forecast artifact in CI — the pipeline fails when the weighted forecast drops below target:
+
+   ```bash
+   dealflow forecast -p pipeline.yml -d deals.csv --min-forecast 100000 || echo "pipeline below target"
+   ```
+
+
 ## Contents
 
 - [Why dealflow?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
