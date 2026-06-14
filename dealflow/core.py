@@ -214,6 +214,8 @@ class Deal:
 
     @property
     def current_stage(self) -> str:
+        if not self.history:
+            raise DealflowError(f"deal {self.deal_id!r} has no history")
         return self.history[-1][0]
 
 
@@ -262,6 +264,7 @@ def parse_pipeline(text: str) -> Pipeline:
     stages: list[Stage] = []
     won_stage = None
     lost_stages: set[str] = set()
+    seen_names: set[str] = set()
     for i, item in enumerate(raw_stages):
         if isinstance(item, str):
             sname, terminal, won = item, False, False
@@ -274,7 +277,11 @@ def parse_pipeline(text: str) -> Pipeline:
             terminal = won or stype in ("lost", "closed", "terminal") or bool(item.get("terminal"))
         else:
             raise DealflowError(f"stage #{i} must be a string or mapping")
-        st = Stage(name=str(sname), order=i, terminal=terminal, won=won)
+        sname_str = str(sname)
+        if sname_str in seen_names:
+            raise DealflowError(f"duplicate stage name {sname_str!r} at position {i}")
+        seen_names.add(sname_str)
+        st = Stage(name=sname_str, order=i, terminal=terminal, won=won)
         stages.append(st)
         if won:
             won_stage = st.name
@@ -329,12 +336,17 @@ def load_deals(path_or_text: str, *, is_text: bool = False) -> list[Deal]:
 
         events: dict[str, list[tuple[str, _dt.date]]] = {}
         amounts: dict[str, float] = {}
-        for row in reader:
+        for row_num, row in enumerate(reader, start=2):  # 2 = first data row (1=header)
             did = (row[cols["deal_id"]] or "").strip()
             if not did:
                 continue
             stage = (row[cols["stage"]] or "").strip()
-            date = _parse_date(row[cols["date"]])
+            if not stage:
+                raise DealflowError(f"row {row_num}: stage is empty for deal_id {did!r}")
+            try:
+                date = _parse_date(row[cols["date"]])
+            except DealflowError as exc:
+                raise DealflowError(f"row {row_num}: {exc}") from exc
             events.setdefault(did, []).append((stage, date))
             if has_amount:
                 raw = (row[cols["amount"]] or "").strip().replace("$", "").replace(",", "")

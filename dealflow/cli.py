@@ -109,6 +109,18 @@ def main(argv=None) -> int:
         return 2
 
     if args.command == "forecast":
+        if args.min_win_rate is not None and not (0.0 <= args.min_win_rate <= 1.0):
+            print(
+                f"error: --min-win-rate must be between 0 and 1, got {args.min_win_rate}",
+                file=sys.stderr,
+            )
+            return 2
+        if args.min_forecast is not None and args.min_forecast < 0:
+            print(
+                f"error: --min-forecast must be non-negative, got {args.min_forecast}",
+                file=sys.stderr,
+            )
+            return 2
         try:
             pipeline = load_pipeline(args.pipeline)
             deals = load_deals(args.deals)
