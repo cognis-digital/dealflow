@@ -1,0 +1,20 @@
+# Enterprise field-sales pipeline. Long sales cycles, multiple buying
+# committee gates. Explicit terminal stages for won and two loss reasons.
+name: Enterprise Field Sales
+stages:
+  - name: sourced
+    type: open
+  - name: discovery
+    type: open
+  - name: solution_review
+    type: open
+  - name: business_case
+    type: open
+  - name: contracting
+    type: open
+  - name: won
+    type: won
+  - name: lost_no_decision
+    type: lost
+  - name: lost_competitor
+    type: lost

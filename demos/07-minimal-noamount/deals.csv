@@ -1,0 +1,15 @@
+deal_id,stage,date
+L-1,new,2026-04-01
+L-1,working,2026-04-08
+L-1,closed,2026-04-20
+L-2,new,2026-04-02
+L-2,working,2026-04-11
+L-3,new,2026-04-03
+L-3,working,2026-04-09
+L-3,closed,2026-04-22
+L-4,new,2026-04-05
+L-5,new,2026-04-06
+L-5,working,2026-04-15
+L-6,new,2026-04-07
+L-6,working,2026-04-14
+L-6,closed,2026-04-25

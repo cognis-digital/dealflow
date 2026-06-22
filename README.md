@@ -55,7 +55,7 @@ dealflow scan .            # → prioritized findings in seconds
 
 ## Contents
 
-- [Why dealflow?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
+- [Why dealflow?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Demos](#demos) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
 
 <a name="why"></a>
 ## Why dealflow?
@@ -69,10 +69,12 @@ Pipeline-as-code: your forecast is a reproducible artifact in CI, so board decks
 <a name="features"></a>
 ## Features
 
-- ✅ Parse Pipeline
-- ✅ Load Pipeline
-- ✅ Load Deals
-- ✅ Analyze
+- ✅ Model a pipeline as a YAML state machine (open / won / lost stages)
+- ✅ Load a CSV deal event log (tolerant of mixed date & `$1,200`-style amounts)
+- ✅ Per-stage conversion (advance rate) and velocity (avg days in stage)
+- ✅ Risk-adjusted weighted forecast over open deals
+- ✅ Three output formats: `table`, `json`, **`csv`** (per-deal export for spreadsheets/BI/CRM import)
+- ✅ CI gates: `--min-forecast` / `--min-win-rate` with exit codes
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
@@ -84,9 +86,10 @@ Pipeline-as-code: your forecast is a reproducible artifact in CI, so board decks
 ```bash
 pip install cognis-dealflow
 dealflow --version
-dealflow scan .                       # scan current project
-dealflow scan . --format json         # machine-readable
-dealflow scan . --fail-on high        # CI gate (non-zero exit)
+dealflow forecast -p pipeline.yml -d deals.csv                 # human table
+dealflow forecast -p pipeline.yml -d deals.csv --format json   # machine-readable
+dealflow forecast -p pipeline.yml -d deals.csv --format csv    # per-deal export
+dealflow forecast -p pipeline.yml -d deals.csv --min-forecast 100000  # CI gate
 ```
 
 <div align="right"><a href="#top">↑ back to top</a></div>
@@ -95,11 +98,58 @@ dealflow scan . --fail-on high        # CI gate (non-zero exit)
 ## Example
 
 ```text
-$ dealflow scan .
-  [HIGH    ] DEA-001  example finding             (./src/app.py)
-  [MEDIUM  ] DEA-002  another signal              (./config.yaml)
+$ dealflow forecast -p pipeline.yml -d deals.csv
+Pipeline: B2B Sales
+Deals: 6 total | 3 open | 2 won | 1 lost
+Win rate (decided): 66.7%
 
-  2 findings · risk score 5 · 38ms
+Stage breakdown:
+  STAGE            ENTER  ADV   ADV%  AVG_DAYS   P(WIN)
+  -----------------------------------------------------
+  lead                 6    5    83%      10.4      44%
+  qualified            5    4    80%      12.2      53%
+  proposal             3    2    67%      12.5      67%
+
+Forecast:
+  Open pipeline value : $60,000
+  Weighted forecast   : $32,444
+```
+
+Or export per-deal rows straight into a spreadsheet / BI tool:
+
+```text
+$ dealflow forecast -p pipeline.yml -d deals.csv --format csv
+deal_id,current_stage,status,amount,p_win,expected_value,age_days
+D3,proposal,open,20000.0,0.6667,13333.33,25
+...
+```
+
+<div align="right"><a href="#top">↑ back to top</a></div>
+
+<a name="demos"></a>
+## Demos — real use cases
+
+Every demo in [`demos/`](demos/) is a self-contained, runnable scenario: a real
+pipeline YAML + a CSV deal log + a `SCENARIO.md` explaining where the data came
+from, the exact command, what to expect, and how to act. All are verified to
+run.
+
+| Demo | Scenario |
+|---|---|
+| [`01-basic`](demos/01-basic/) | 5-stage B2B forecast — the canonical walkthrough |
+| [`02-saas-monthly`](demos/02-saas-monthly/) | SaaS funnel with a procurement/legal stage where deals stall |
+| [`03-enterprise-longcycle`](demos/03-enterprise-longcycle/) | Enterprise field sales, long cycles, two distinct loss reasons |
+| [`04-inbound-velocity`](demos/04-inbound-velocity/) | High-volume self-serve funnel — velocity in days, not months |
+| [`05-quarterly-gate`](demos/05-quarterly-gate/) | Fail CI when the quarterly weighted forecast drops below target |
+| [`06-stalled-deals`](demos/06-stalled-deals/) | Surface aging/stalled deals via the `age_days` column |
+| [`07-minimal-noamount`](demos/07-minimal-noamount/) | Smallest input: string stages, no amounts → conversion-only view |
+| [`08-csv-export-bi`](demos/08-csv-export-bi/) | `--format csv` per-deal export for spreadsheets / BI |
+| [`09-mixed-dateformats`](demos/09-mixed-dateformats/) | Stitch exports with mixed date & `$1,200`-style currency formats |
+
+```sh
+# Run any demo:
+python -m dealflow forecast -p demos/02-saas-monthly/pipeline.yml \
+                            -d demos/02-saas-monthly/deals.csv
 ```
 
 <div align="right"><a href="#top">↑ back to top</a></div>

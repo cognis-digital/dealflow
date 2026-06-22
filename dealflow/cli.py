@@ -20,6 +20,8 @@ Exit codes
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import json
 import sys
 
@@ -59,6 +61,22 @@ def _render_table(rep: Report) -> str:
     return "\n".join(lines)
 
 
+def _render_csv(rep: Report) -> str:
+    """Emit the per-deal forecast as CSV — pipe straight into a spreadsheet,
+    BI tool, or CRM bulk-import. One row per deal, header included.
+    """
+    cols = [
+        "deal_id", "current_stage", "status",
+        "amount", "p_win", "expected_value", "age_days",
+    ]
+    buf = io.StringIO()
+    w = csv.DictWriter(buf, fieldnames=cols, lineterminator="\n")
+    w.writeheader()
+    for d in rep.deals:
+        w.writerow({k: d[k] for k in cols})
+    return buf.getvalue().rstrip("\n")
+
+
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog=TOOL_NAME,
@@ -85,8 +103,9 @@ def _build_parser() -> argparse.ArgumentParser:
     fc.add_argument("-p", "--pipeline", required=True, help="path to pipeline YAML file")
     fc.add_argument("-d", "--deals", required=True, help="path to deals CSV event log")
     fc.add_argument(
-        "--format", choices=("table", "json"), default="table",
-        help="output format (default: table)",
+        "--format", choices=("table", "json", "csv"), default="table",
+        help="output format: table (human), json (full report), "
+             "csv (per-deal rows for spreadsheets/CRM import) (default: table)",
     )
     fc.add_argument(
         "--min-forecast", type=float, default=None,
@@ -122,6 +141,8 @@ def main(argv=None) -> int:
 
         if args.format == "json":
             print(json.dumps(rep.to_dict(), indent=2))
+        elif args.format == "csv":
+            print(_render_csv(rep))
         else:
             print(_render_table(rep))
 

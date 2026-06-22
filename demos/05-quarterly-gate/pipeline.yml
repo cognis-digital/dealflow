@@ -1,0 +1,12 @@
+# Quarterly commit pipeline. Used in CI to gate the board forecast:
+# the build fails if the weighted forecast falls below the quarterly target.
+name: Q3 Commit
+stages:
+  - name: commit
+    type: open
+  - name: best_case
+    type: open
+  - name: closed_won
+    type: won
+  - name: slipped
+    type: lost

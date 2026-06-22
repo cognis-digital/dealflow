@@ -1,0 +1,9 @@
+# Smallest possible pipeline: bare stage names (string shorthand). No
+# explicit terminal markers, so the LAST stage is treated as "won" by
+# default. Pair with a deal log that has no amount column to get a
+# pure count-and-conversion view (forecast falls back to 0 value).
+name: Minimal Funnel
+stages:
+  - new
+  - working
+  - closed

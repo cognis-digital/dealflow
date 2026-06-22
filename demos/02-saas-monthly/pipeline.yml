@@ -1,0 +1,16 @@
+# SaaS new-business pipeline including a procurement/legal stage that
+# many B2B deals stall in. Modeled as a state machine.
+name: SaaS New Business
+stages:
+  - name: discovery
+    type: open
+  - name: demo
+    type: open
+  - name: pilot
+    type: open
+  - name: procurement
+    type: open
+  - name: closed_won
+    type: won
+  - name: closed_lost
+    type: lost

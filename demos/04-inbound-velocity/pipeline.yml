@@ -1,0 +1,14 @@
+# High-volume, low-ASP self-serve inbound funnel. Short cycle measured
+# in days. Useful for diagnosing SDR speed-to-lead and stage velocity.
+name: Inbound Self-Serve
+stages:
+  - name: signup
+    type: open
+  - name: activated
+    type: open
+  - name: sales_qualified
+    type: open
+  - name: paid
+    type: won
+  - name: churned_trial
+    type: lost

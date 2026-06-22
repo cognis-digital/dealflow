@@ -1,0 +1,14 @@
+# A pipeline used to surface aging / stalled deals. The age_days column in
+# the per-deal output (and CSV export) flags deals sitting too long.
+name: Renewals & Expansion
+stages:
+  - name: identified
+    type: open
+  - name: engaged
+    type: open
+  - name: negotiation
+    type: open
+  - name: renewed
+    type: won
+  - name: lost
+    type: lost

@@ -1,0 +1,15 @@
+# Standard channel/partner pipeline. This demo exists to show the
+# --format csv exporter: one row per deal (deal_id, stage, status, amount,
+# p_win, expected_value, age_days) ready to drop into a spreadsheet or BI tool.
+name: Partner Channel
+stages:
+  - name: registered
+    type: open
+  - name: qualified
+    type: open
+  - name: proposal
+    type: open
+  - name: closed_won
+    type: won
+  - name: closed_lost
+    type: lost

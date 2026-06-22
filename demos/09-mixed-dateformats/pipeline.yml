@@ -1,0 +1,16 @@
+# Demonstrates that DEALFLOW's CSV loader accepts several date formats in the
+# same log (YYYY-MM-DD, YYYY/MM/DD, MM/DD/YYYY) and amounts written with
+# currency symbols / thousands separators ($1,200). Useful when stitching
+# together exports from multiple CRMs or regions.
+name: Multi-Region Export
+stages:
+  - name: prospect
+    type: open
+  - name: meeting
+    type: open
+  - name: proposal
+    type: open
+  - name: won
+    type: won
+  - name: lost
+    type: lost
