@@ -1,0 +1,3 @@
+$ dealflow-emit --version
+
+dealflow 0.1.0

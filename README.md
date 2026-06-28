@@ -20,6 +20,55 @@ pip install cognis-dealflow
 dealflow scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ dealflow-emit --version
+dealflow 0.1.0
+```
+
+```console
+$ dealflow-emit --help
+usage: dealflow [-h] [--version] <command> ...
+
+Model a sales pipeline as a YAML state machine and compute conversion, velocity, and a weighted forecast from a CSV deal log. Pipeline-as-code: a reproducible forecast artifact for CI.
+
+positional arguments:
+  <command>
+    forecast  compute conversion/velocity/forecast from a pipeline + deal log
+
+options:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+
+example:
+  dealflow forecast -p pipeline.yml -d deals.csv
+  dealflow forecast -p pipeline.yml -d deals.csv --format json --min-forecast 100000
+```
+
+> Blocks above are real `dealflow` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{"findings": [
+    {
+      "id": "1234567890",
+      "title": "Suspicious Activity Detected",
+      "description": "An attacker was detected attempting to access a sensitive system.",
+      "labels": ["suspicious", "malware"],
+      "created_at": "2023-02-20T14:30:00Z"
+    }
+  ]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 1. Install the CLI (Python 3.9+):

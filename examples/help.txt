@@ -1,0 +1,17 @@
+$ dealflow-emit --help
+
+usage: dealflow [-h] [--version] <command> ...
+
+Model a sales pipeline as a YAML state machine and compute conversion, velocity, and a weighted forecast from a CSV deal log. Pipeline-as-code: a reproducible forecast artifact for CI.
+
+positional arguments:
+  <command>
+    forecast  compute conversion/velocity/forecast from a pipeline + deal log
+
+options:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
+
+example:
+  dealflow forecast -p pipeline.yml -d deals.csv
+  dealflow forecast -p pipeline.yml -d deals.csv --format json --min-forecast 100000
