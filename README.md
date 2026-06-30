@@ -178,10 +178,42 @@ D3,proposal,open,20000.0,0.6667,13333.33,25
 <a name="demos"></a>
 ## Demos — real use cases
 
-Every demo in [`demos/`](demos/) is a self-contained, runnable scenario: a real
-pipeline YAML + a CSV deal log + a `SCENARIO.md` explaining where the data came
-from, the exact command, what to expect, and how to act. All are verified to
-run.
+Two flavors ship in [`demos/`](demos/). **Narrated Python scenarios**
+(`NN_name.py`) each target a different audience and drive the *real* dealflow
+API offline against a bundled sample — clear narrated output, exit 0, so they
+double as smoke tests. **Data scenarios** (`NN-name/`) are a pipeline YAML + CSV
+deal log + `SCENARIO.md` you run straight through the CLI. All are verified to
+run. Full details in [`docs/DEMOS.md`](docs/DEMOS.md).
+
+```sh
+PYTHONUTF8=1 python demos/run_all.py            # all five narrated scenarios
+PYTHONUTF8=1 python demos/02_revops_funnel.py   # or just one
+```
+
+| Narrated scenario | Audience | Shows |
+|---|---|---|
+| [`01_founder_forecast.py`](demos/01_founder_forecast.py) | Founders / sales leaders | Raw pipeline vs. risk-adjusted weighted forecast — the board number from git |
+| [`02_revops_funnel.py`](demos/02_revops_funnel.py) | RevOps | Per-stage advance rate + velocity → find the leak and the bottleneck |
+| [`03_bd_rep_deals.py`](demos/03_bd_rep_deals.py) | BD reps / AEs | Open-deal worklist ranked by expected value, plus stalled deals |
+| [`04_finance_ci_gate.py`](demos/04_finance_ci_gate.py) | Finance / forecasting | `--min-forecast` as a CI tripwire: gate passes (0) / fails the build (1) |
+| [`05_analyst_csv_export.py`](demos/05_analyst_csv_export.py) | Data analysts / BI | `--format csv` per-deal export, reconciled against the engine forecast |
+
+The deal state machine each scenario walks:
+
+```mermaid
+stateDiagram-v2
+    [*] --> lead
+    lead --> qualified
+    qualified --> proposal
+    proposal --> won
+    lead --> lost
+    qualified --> lost
+    proposal --> lost
+    won --> [*]
+    lost --> [*]
+```
+
+Self-contained **data scenarios** (run through the CLI):
 
 | Demo | Scenario |
 |---|---|
