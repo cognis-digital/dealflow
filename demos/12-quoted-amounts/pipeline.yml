@@ -1,0 +1,15 @@
+# Standard 4-stage pipeline. Paired with a deal log whose amounts are written
+# with currency symbols, thousands separators, and quotes ("$1,250,000") to
+# exercise the loader's money-string normalization.
+name: Enterprise ACV
+stages:
+  - name: discovery
+    type: open
+  - name: evaluation
+    type: open
+  - name: negotiation
+    type: open
+  - name: won
+    type: won
+  - name: lost
+    type: lost

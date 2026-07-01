@@ -56,9 +56,10 @@ def test_csv_export_is_valid_and_matches_forecast():
         "amount", "p_win", "expected_value", "age_days",
     }
     assert set(rows[0].keys()) == expected_cols
-    # expected_value column sums to the weighted forecast.
+    # expected_value column sums to the weighted forecast (within rounding:
+    # each row is rounded to cents, so the sum can differ by a few cents).
     ev_sum = sum(float(r["expected_value"]) for r in rows)
-    assert round(ev_sum, 2) == round(rep.weighted_forecast, 2)
+    assert abs(ev_sum - rep.weighted_forecast) < 0.05
     # won/lost rows contribute zero expected value.
     for r in rows:
         if r["status"] in ("won", "lost"):

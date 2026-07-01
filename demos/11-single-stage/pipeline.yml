@@ -1,0 +1,7 @@
+# Degenerate but valid pipeline: a single open stage. With no explicit 'won'
+# stage, DEALFLOW promotes the last NON-terminal stage to the won stage. Here
+# that means the one stage is both the entry and the win condition — every deal
+# that reaches it is counted won. Exercises the smallest legal state machine.
+name: One-Stage
+stages:
+  - closed

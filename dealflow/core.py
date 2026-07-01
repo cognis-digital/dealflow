@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import csv
 import io
+import os
 import datetime as _dt
 from dataclasses import dataclass, field
 from typing import Any
@@ -27,6 +28,32 @@ from typing import Any
 
 class DealflowError(Exception):
     """Raised on malformed pipeline definitions or deal logs."""
+
+
+# --------------------------------------------------------------------------- #
+# Identity — single source of truth is the repo VERSION file (falls back to a
+# baked constant when the file isn't shipped, e.g. an installed wheel).
+# --------------------------------------------------------------------------- #
+TOOL_NAME = "dealflow"
+
+
+def _read_version() -> str:
+    here = os.path.dirname(os.path.abspath(__file__))
+    for cand in (
+        os.path.join(here, os.pardir, "VERSION"),
+        os.path.join(here, "VERSION"),
+    ):
+        try:
+            with open(cand, "r", encoding="utf-8") as fh:
+                v = fh.read().strip()
+            if v:
+                return v
+        except OSError:
+            continue
+    return "0.0.0"
+
+
+TOOL_VERSION = _read_version()
 
 
 # --------------------------------------------------------------------------- #
@@ -59,10 +86,36 @@ def _strip_comment(line: str) -> str:
     return "".join(out)
 
 
+def _parse_flow_mapping(v: str) -> dict:
+    """Parse a single-line flow mapping: ``{name: lost, type: lost}``.
+
+    Deliberately small: comma-separated ``key: value`` pairs, quotes stripped,
+    values coerced. Nested braces/brackets are not supported and raise.
+    """
+    inner = v[1:-1].strip()
+    out: dict[str, Any] = {}
+    if not inner:
+        return out
+    for part in inner.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if ":" not in part:
+            raise DealflowError(f"malformed flow mapping entry: {part!r}")
+        k, _, val = part.partition(":")
+        k = k.strip().strip("\"'")
+        if not k:
+            raise DealflowError(f"flow mapping has empty key in: {v!r}")
+        out[k] = _coerce(val) if val.strip() else None
+    return out
+
+
 def _coerce(val: str) -> Any:
     v = val.strip()
     if not v:
         return None
+    if v[0] == "{" and v[-1] == "}":
+        return _parse_flow_mapping(v)
     if (v[0] == v[-1]) and v[0] in "\"'" and len(v) >= 2:
         return v[1:-1]
     low = v.lower()
@@ -120,6 +173,9 @@ def _yaml_load(text: str) -> Any:
                 # nested block belongs to this list item
                 child = parse_block(indent + 1) if pos < len(tokens) and tokens[pos][0] > indent else None
                 items.append(child)
+            elif inner[0] == "{" and inner[-1] == "}":
+                # inline flow mapping: "- {name: lost, type: lost}"
+                items.append(_parse_flow_mapping(inner))
             elif ":" in inner and not _looks_scalar(inner):
                 # "- key: value" -> a mapping starting on the dash line.
                 key, _, val = inner.partition(":")
@@ -262,6 +318,8 @@ def parse_pipeline(text: str) -> Pipeline:
     stages: list[Stage] = []
     won_stage = None
     lost_stages: set[str] = set()
+    seen_names: set[str] = set()
+    won_count = 0
     for i, item in enumerate(raw_stages):
         if isinstance(item, str):
             sname, terminal, won = item, False, False
@@ -273,19 +331,39 @@ def parse_pipeline(text: str) -> Pipeline:
             won = stype == "won" or bool(item.get("won"))
             terminal = won or stype in ("lost", "closed", "terminal") or bool(item.get("terminal"))
         else:
-            raise DealflowError(f"stage #{i} must be a string or mapping")
-        st = Stage(name=str(sname), order=i, terminal=terminal, won=won)
+            raise DealflowError(f"stage #{i} must be a string or mapping, got {type(item).__name__}")
+        sname = str(sname).strip()
+        if not sname:
+            raise DealflowError(f"stage #{i} has an empty name")
+        if sname in seen_names:
+            raise DealflowError(f"duplicate stage name: {sname!r}")
+        seen_names.add(sname)
+        st = Stage(name=sname, order=i, terminal=terminal, won=won)
         stages.append(st)
         if won:
             won_stage = st.name
+            won_count += 1
         elif terminal:
             lost_stages.add(st.name)
 
+    if won_count > 1:
+        raise DealflowError(
+            "pipeline defines more than one 'won' stage; exactly one is allowed"
+        )
+
     if won_stage is None:
-        # default: last stage is the won stage
-        stages[-1].terminal = True
-        stages[-1].won = True
-        won_stage = stages[-1].name
+        # No stage was explicitly marked won: promote the last NON-terminal
+        # stage to the won stage. Never silently turn a 'lost'/terminal stage
+        # into the win condition (that inverts every forecast).
+        candidates = [s for s in stages if not s.terminal]
+        if not candidates:
+            raise DealflowError(
+                "pipeline has no open stages and no 'won' stage to advance toward"
+            )
+        winner = candidates[-1]
+        winner.terminal = True
+        winner.won = True
+        won_stage = winner.name
 
     return Pipeline(name=name, stages=stages, won_stage=won_stage, lost_stages=lost_stages)
 
@@ -296,7 +374,9 @@ def load_pipeline(path: str) -> Pipeline:
 
 
 def _parse_date(s: str) -> _dt.date:
-    s = s.strip()
+    s = (s or "").strip()
+    if not s:
+        raise DealflowError("empty date value")
     for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%m/%d/%Y", "%m-%d-%Y"):
         try:
             return _dt.datetime.strptime(s, fmt).date()
@@ -329,21 +409,34 @@ def load_deals(path_or_text: str, *, is_text: bool = False) -> list[Deal]:
 
         events: dict[str, list[tuple[str, _dt.date]]] = {}
         amounts: dict[str, float] = {}
-        for row in reader:
+        for lineno, row in enumerate(reader, start=2):  # header is line 1
             did = (row[cols["deal_id"]] or "").strip()
             if not did:
                 continue
             stage = (row[cols["stage"]] or "").strip()
-            date = _parse_date(row[cols["date"]])
+            if not stage:
+                raise DealflowError(
+                    f"row {lineno}: deal {did!r} has an empty stage"
+                )
+            try:
+                date = _parse_date(row[cols["date"]])
+            except DealflowError as e:
+                raise DealflowError(f"row {lineno} (deal {did!r}): {e}") from None
             events.setdefault(did, []).append((stage, date))
             if has_amount:
                 raw = (row[cols["amount"]] or "").strip().replace("$", "").replace(",", "")
                 if raw:
                     try:
                         amt = float(raw)
-                        amounts[did] = max(amounts.get(did, 0.0), amt)
                     except ValueError:
-                        pass
+                        raise DealflowError(
+                            f"row {lineno} (deal {did!r}): amount {raw!r} is not a number"
+                        ) from None
+                    if amt < 0:
+                        raise DealflowError(
+                            f"row {lineno} (deal {did!r}): amount {amt} is negative"
+                        )
+                    amounts[did] = max(amounts.get(did, 0.0), amt)
     finally:
         if not is_text:
             fh.close()
@@ -386,8 +479,15 @@ def analyze(pipeline: Pipeline, deals: list[Deal]) -> Report:
             if i + 1 < len(d.history):
                 nxt_stage, nxt_date = d.history[i + 1]
                 durations[stage].append((nxt_date - date).days)
-                # advancing = next stage is strictly later in pipeline order
-                if pipeline.index(nxt_stage) > pipeline.index(stage):
+                # Advancing = moving strictly forward in pipeline order toward
+                # the win condition. A transition INTO a lost/terminal-loss
+                # stage is NOT an advance even though a lost stage may sit at a
+                # higher order index — it is the opposite of progress, and
+                # counting it inflates advance rates and P(win).
+                if (
+                    pipeline.index(nxt_stage) > pipeline.index(stage)
+                    and nxt_stage not in pipeline.lost_stages
+                ):
                     advanced[stage] += 1
 
         cur = d.current_stage

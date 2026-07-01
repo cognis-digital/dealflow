@@ -26,8 +26,8 @@ def main() -> None:
     print(f"Current weighted forecast: {money(rep.weighted_forecast)}  "
           f"(win rate {rep.overall_win_rate * 100:.0f}%)")
 
-    target_ok = 100_000
-    target_high = 200_000
+    target_ok = 50_000
+    target_high = 100_000
 
     print(f"\n1) CI gate at {money(target_ok)} (a realistic floor):")
     rc = _quiet_gate(base, target_ok)

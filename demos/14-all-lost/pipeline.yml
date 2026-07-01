@@ -1,0 +1,13 @@
+# Every deal ended in the lost stage. Exercises the zero-win-rate path: the
+# weighted forecast on any remaining open deals must not blow up even when the
+# historical advance rate into 'won' is zero.
+name: Rough Quarter
+stages:
+  - name: intro
+    type: open
+  - name: pitch
+    type: open
+  - name: won
+    type: won
+  - name: lost
+    type: lost

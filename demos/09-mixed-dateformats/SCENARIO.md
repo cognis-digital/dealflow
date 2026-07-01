@@ -25,7 +25,7 @@ python -m dealflow forecast -p demos/09-mixed-dateformats/pipeline.yml \
 - The `$45,000`-style amounts are parsed as numbers: won value **$45,000**,
   open pipeline value **$81,250**.
 - **5 deals · 3 open · 1 won · 1 lost · 50% decided win rate**, weighted
-  forecast **~$32,550**.
+  forecast **~$26,450**.
 
 ## How to act
 

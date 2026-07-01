@@ -1,0 +1,14 @@
+# Some deals carry an amount, some don't (blank amount cells). The loader
+# treats missing amounts as 0 value but STILL counts the deal for conversion
+# and velocity. Demonstrates a mixed log from a CRM where the amount field
+# isn't mandatory.
+name: Mixed Amounts
+stages:
+  - name: lead
+    type: open
+  - name: demo
+    type: open
+  - name: won
+    type: won
+  - name: lost
+    type: lost

@@ -164,13 +164,14 @@ Win rate (decided): 66.7%
 Stage breakdown:
   STAGE            ENTER  ADV   ADV%  AVG_DAYS   P(WIN)
   -----------------------------------------------------
-  lead                 6    5    83%      10.4      44%
-  qualified            5    4    80%      12.2      53%
+  lead                 6    5    83%      10.4      33%
+  qualified            5    3    60%      12.2      40%
   proposal             3    2    67%      12.5      67%
 
 Forecast:
   Open pipeline value : $60,000
-  Weighted forecast   : $32,444
+  Won value (closed)  : $80,000
+  Weighted forecast   : $27,667
 ```
 
 Or export per-deal rows straight into a spreadsheet / BI tool:

@@ -20,6 +20,18 @@ SCENARIOS = [
     "03_bd_rep_deals",
     "04_finance_ci_gate",
     "05_analyst_csv_export",
+    "06_stalled_deals",
+    "07_minimal_noamount",
+    "08_mixed_dateformats",
+    "09_json_pipeline_api",
+    "10_flow_mapping_yaml",
+    "11_zero_win_quarter",
+    "12_enterprise_acv",
+    "13_plg_velocity",
+    "14_partial_amounts",
+    "15_large_pipeline_scale",
+    "16_error_handling",
+    "17_winrate_gate",
 ]
 
 
@@ -40,7 +52,7 @@ def test_common_helpers_use_real_api():
     # values must match the real engine (and the README example)
     assert pipeline.name == "B2B Sales"
     assert rep.total_deals == 6
-    assert round(rep.weighted_forecast, 2) == 32444.44
+    assert round(rep.weighted_forecast, 2) == 27666.67
     by = common.by_stage(rep)
     assert set(by) == {"lead", "qualified", "proposal", "won", "lost"}
 
@@ -56,5 +68,5 @@ def test_finance_gate_demo_exercises_both_exit_codes():
     demo = importlib.import_module("04_finance_ci_gate")
     pipe, deals = demo.sample("05-quarterly-gate")
     base = ["forecast", "-p", pipe, "-d", deals, "--format", "json"]
-    assert demo._quiet_gate(base, 100_000) == 0   # realistic floor passes
-    assert demo._quiet_gate(base, 200_000) == 1   # over-target floor fails
+    assert demo._quiet_gate(base, 50_000) == 0    # realistic floor passes
+    assert demo._quiet_gate(base, 100_000) == 1   # over-target floor fails

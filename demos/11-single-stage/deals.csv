@@ -1,0 +1,4 @@
+deal_id,stage,date,amount
+S1,closed,2026-03-01,1000
+S2,closed,2026-03-02,2000
+S3,closed,2026-03-03,3000

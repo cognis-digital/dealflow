@@ -1,0 +1,10 @@
+# Same B2B pipeline expressed with inline FLOW MAPPINGS ({name: x, type: y})
+# instead of block style. Exercises the YAML subset parser's flow-mapping
+# support and proves it produces an identical state machine.
+name: Flow-Mapping Pipeline
+stages:
+  - {name: lead, type: open}
+  - {name: qualified, type: open}
+  - {name: proposal, type: open}
+  - {name: won, type: won}
+  - {name: lost, type: lost}

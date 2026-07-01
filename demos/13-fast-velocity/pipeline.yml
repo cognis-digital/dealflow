@@ -1,0 +1,13 @@
+# A high-velocity, self-serve funnel where deals move in days, not months.
+# Used to demonstrate the velocity (avg_days_in_stage) computation on short
+# cycles and a healthy advance rate.
+name: PLG Self-Serve
+stages:
+  - name: signup
+    type: open
+  - name: activated
+    type: open
+  - name: paid
+    type: won
+  - name: churned
+    type: lost

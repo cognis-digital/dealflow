@@ -23,7 +23,7 @@ python -m dealflow forecast -p demos/06-stalled-deals/pipeline.yml \
 - **7 deals · 4 open · 2 won · 1 lost · 66.7% decided win rate.**
 - In the CSV, `REN-301` and `REN-307` (both open, in `negotiation`) show the
   largest `age_days` (42) — these are the stalled deals to chase first.
-- Weighted forecast **~$129,833** against **$290,000** of open pipeline.
+- Weighted forecast **~$117,667** against **$290,000** of open pipeline.
 
 ## How to act
 

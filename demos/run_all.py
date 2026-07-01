@@ -18,6 +18,18 @@ SCENARIOS = [
     "03_bd_rep_deals",
     "04_finance_ci_gate",
     "05_analyst_csv_export",
+    "06_stalled_deals",
+    "07_minimal_noamount",
+    "08_mixed_dateformats",
+    "09_json_pipeline_api",
+    "10_flow_mapping_yaml",
+    "11_zero_win_quarter",
+    "12_enterprise_acv",
+    "13_plg_velocity",
+    "14_partial_amounts",
+    "15_large_pipeline_scale",
+    "16_error_handling",
+    "17_winrate_gate",
 ]
 
 

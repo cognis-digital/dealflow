@@ -1,0 +1,18 @@
+# A wider, 5-open-stage enterprise pipeline with 60 deals, used to show the
+# engine scales and that the stage table / forecast stay coherent at volume.
+name: Enterprise Wide-Funnel
+stages:
+  - name: prospect
+    type: open
+  - name: qualify
+    type: open
+  - name: demo
+    type: open
+  - name: proposal
+    type: open
+  - name: negotiate
+    type: open
+  - name: won
+    type: won
+  - name: lost
+    type: lost

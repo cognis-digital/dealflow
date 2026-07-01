@@ -22,7 +22,7 @@ python -m dealflow forecast -p demos/04-inbound-velocity/pipeline.yml \
 - **12 deals · 5 open · 4 won · 3 lost · 57.1% decided win rate.**
 - Stage dwell times are tiny: `signup` ~2.6 days, `activated` ~5 days. That is
   the whole point — slow activation here is measured in single-digit days.
-- Weighted forecast is small in absolute dollars (**~$1,176**) because ASPs are
+- Weighted forecast is small in absolute dollars (**~$995**) because ASPs are
   low; this funnel is a volume game, so watch conversion %, not dollars.
 
 ## How to act

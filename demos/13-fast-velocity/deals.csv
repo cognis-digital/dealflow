@@ -1,0 +1,17 @@
+deal_id,stage,date,amount
+U1,signup,2026-05-01,120
+U1,activated,2026-05-03,120
+U1,paid,2026-05-05,120
+U2,signup,2026-05-01,120
+U2,activated,2026-05-02,120
+U2,paid,2026-05-04,120
+U3,signup,2026-05-02,120
+U3,activated,2026-05-05,120
+U4,signup,2026-05-02,120
+U4,churned,2026-05-06,120
+U5,signup,2026-05-03,120
+U5,activated,2026-05-04,120
+U5,paid,2026-05-07,120
+U6,signup,2026-05-03,120
+U7,signup,2026-05-04,120
+U7,activated,2026-05-06,120

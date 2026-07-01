@@ -18,7 +18,7 @@ python -m dealflow forecast -p demos/05-quarterly-gate/pipeline.yml \
                             -d demos/05-quarterly-gate/deals.csv
 ```
 
-Weighted forecast for this dataset is **$135,000**.
+Weighted forecast for this dataset is **$67,500**.
 
 ## The gate
 

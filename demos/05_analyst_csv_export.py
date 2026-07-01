@@ -41,7 +41,7 @@ def main() -> None:
     print(f"  open deals               : {len(open_rows)}")
     print(f"  sum(expected_value) open : {money(pipeline_ev)}")
     print(f"  matches engine forecast  : {money(rep.weighted_forecast)} "
-          f"({'YES' if round(pipeline_ev, 2) == round(rep.weighted_forecast, 2) else 'NO'})")
+          f"({'YES' if abs(pipeline_ev - rep.weighted_forecast) < 0.05 else 'NO'})")
 
     print("\nPipe it straight to a file for Sheets / Looker / a CRM import:")
     print("    dealflow forecast -p pipeline.yml -d deals.csv --format csv > forecast.csv")
