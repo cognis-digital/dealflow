@@ -30,6 +30,7 @@ SCENARIOS = [
     "15_large_pipeline_scale",
     "16_error_handling",
     "17_winrate_gate",
+    "18_concentration_risk",
 ]
 
 

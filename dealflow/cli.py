@@ -58,6 +58,10 @@ def _render_table(rep: Report) -> str:
     lines.append(f"  Open pipeline value : {_fmt_money(rep.open_value)}")
     lines.append(f"  Won value (closed)  : {_fmt_money(rep.won_value)}")
     lines.append(f"  Weighted forecast   : {_fmt_money(rep.weighted_forecast)}")
+    lines.append(
+        f"  Top-deal concentration: {rep.concentration * 100:.0f}% "
+        f"(share of forecast in the single largest open deal)"
+    )
     return "\n".join(lines)
 
 
@@ -115,6 +119,12 @@ def _build_parser() -> argparse.ArgumentParser:
         "--min-win-rate", type=float, default=None,
         help="exit non-zero if win rate (0-1) is below this value (CI gate)",
     )
+    fc.add_argument(
+        "--max-concentration", type=float, default=None,
+        help="exit non-zero if more than this fraction (0-1) of the weighted "
+             "forecast rides on the single largest open deal (CI gate against a "
+             "fragile, whale-dependent forecast)",
+    )
     return p
 
 
@@ -158,6 +168,13 @@ def main(argv=None) -> int:
             print(
                 f"gate: win rate {rep.overall_win_rate:.4f} "
                 f"< min {args.min_win_rate:.4f}",
+                file=sys.stderr,
+            )
+            gate_failed = True
+        if args.max_concentration is not None and rep.concentration > args.max_concentration:
+            print(
+                f"gate: top-deal concentration {rep.concentration:.4f} "
+                f"> max {args.max_concentration:.4f}",
                 file=sys.stderr,
             )
             gate_failed = True

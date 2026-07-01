@@ -132,7 +132,8 @@ Pipeline-as-code: your forecast is a reproducible artifact in CI, so board decks
 - ✅ Per-stage conversion (advance rate) and velocity (avg days in stage)
 - ✅ Risk-adjusted weighted forecast over open deals
 - ✅ Three output formats: `table`, `json`, **`csv`** (per-deal export for spreadsheets/BI/CRM import)
-- ✅ CI gates: `--min-forecast` / `--min-win-rate` with exit codes
+- ✅ Concentration risk: share of the forecast riding on the single largest open deal
+- ✅ CI gates: `--min-forecast` / `--min-win-rate` / `--max-concentration` with exit codes
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
