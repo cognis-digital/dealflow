@@ -39,6 +39,7 @@ python -m dealflow forecast -p demos/02-saas-monthly/pipeline.yml \
 | 15 | [`15_large_pipeline_scale.py`](../demos/15_large_pipeline_scale.py) | Skeptics / QA | 60 deals through 5 open stages, asserting the engine's invariants hold at volume | `16-large-pipeline` |
 | 16 | [`16_error_handling.py`](../demos/16_error_handling.py) | Integrators | Each malformed input (bad pipeline, unknown stage, bad date, negative amount, missing column) raises a precise `DealflowError` | inline |
 | 17 | [`17_winrate_gate.py`](../demos/17_winrate_gate.py) | Finance / CI | The `--min-win-rate` gate fails a build on eroding quality, independent of the dollar forecast | `02-saas-monthly` |
+| 18 | [`18_concentration_risk.py`](../demos/18_concentration_risk.py) | Finance / RevOps | `concentration` — the share of the forecast riding on one whale — and the `--max-concentration` gate against a fragile pipeline | `12-quoted-amounts` |
 
 Each narrated scenario rebuilds its result from a bundled sample, so they run in
 any order or on their own, fully offline. `tests/` covers the same code paths

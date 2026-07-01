@@ -286,6 +286,11 @@ class Report:
     overall_win_rate: float
     stages: list[dict]
     deals: list[dict]
+    # Fraction of the weighted forecast riding on the single largest open deal
+    # (0.0 when there is no forecast). A high value means the number is fragile:
+    # one deal slipping erases most of it. Appended with a default so existing
+    # positional construction of Report stays valid.
+    concentration: float = 0.0
 
     def to_dict(self) -> dict:
         return {
@@ -298,6 +303,7 @@ class Report:
             "won_value": round(self.won_value, 2),
             "weighted_forecast": round(self.weighted_forecast, 2),
             "overall_win_rate": round(self.overall_win_rate, 4),
+            "concentration": round(self.concentration, 4),
             "stages": self.stages,
             "deals": self.deals,
         }
@@ -558,6 +564,11 @@ def analyze(pipeline: Pipeline, deals: list[Deal]) -> Report:
     decided = won_count + lost_count
     win_rate = (won_count / decided) if decided else 0.0
 
+    # Concentration = share of the weighted forecast carried by the single
+    # largest open deal's expected value. High => the number is fragile.
+    open_evs = [r["expected_value"] for r in deal_rows if r["status"] == "open"]
+    concentration = (max(open_evs) / weighted) if (weighted > 0 and open_evs) else 0.0
+
     return Report(
         pipeline=pipeline.name,
         total_deals=total,
@@ -570,4 +581,5 @@ def analyze(pipeline: Pipeline, deals: list[Deal]) -> Report:
         overall_win_rate=win_rate,
         stages=stage_rows,
         deals=deal_rows,
+        concentration=concentration,
     )
