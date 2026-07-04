@@ -1,0 +1,6 @@
+# A target contract opportunity with required capabilities and set-aside goals.
+name: Counter-UAS Sensing Program
+required: [radar, edge-ai, systems-integration, cybersecurity]
+preferred: [logistics, program-management]
+set_aside_goals: [sdvosb, 8(a)]
+clearance: secret

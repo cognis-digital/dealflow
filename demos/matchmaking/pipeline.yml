@@ -1,0 +1,33 @@
+# A capture pipeline of business-development opportunities.
+# stale_days controls when an un-updated open opp is flagged for a nudge.
+stale_days: 30
+opportunities:
+  - id: o1
+    name: Navy sensing OTA
+    stage: proposal
+    value: 4000000
+    owner: bd-lead
+    updated: 2026-06-01
+    tags: [ota, sensing]
+  - id: o2
+    name: SBIR Phase II award
+    stage: submitted
+    value: 1800000
+    owner: tech-lead
+    updated: 2026-06-25
+  - id: o3
+    name: Army C2 recompete
+    stage: capture
+    value: 12000000
+    owner: capture-mgr
+    updated: 2026-01-10
+    tags: [recompete, c2]
+  - id: o4
+    name: Air Force pitch day
+    stage: qualified
+    value: 900000
+    updated: 2026-06-20
+  - id: o5
+    name: Prior lost bid
+    stage: lost
+    value: 500000

@@ -14,3 +14,11 @@ ports:
 demos:
   - changed-files:
       - any-glob-to-any-file: ['demos/**']
+matchmaking:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'dealflow/matching.py'
+          - 'dealflow/capital_sources.py'
+          - 'dealflow/teaming.py'
+          - 'dealflow/opps.py'
+          - 'dealflow/reports.py'

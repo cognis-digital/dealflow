@@ -32,6 +32,14 @@ SCENARIOS = [
     "15_large_pipeline_scale",
     "16_error_handling",
     "17_winrate_gate",
+    "19_capital_matchmaking",
+    "20_growth_stage_matching",
+    "21_capital_source_taxonomy",
+    "22_strategic_teaming",
+    "23_teaming_gap_analysis",
+    "24_capture_pipeline",
+    "25_match_report_html",
+    "26_teaming_graph_edges",
 ]
 
 

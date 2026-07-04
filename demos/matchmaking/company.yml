@@ -1,0 +1,14 @@
+# A dual-use defense-tech company profile for capital matchmaking.
+# All fields optional; missing fields cause the relevant factor to abstain.
+name: Aperture Sensing
+stage: seed
+ask: 1500000              # capital sought, USD
+sectors: [dual-use, deep-tech, sensors]
+technology: [edge-ai]
+geography: [us]
+region: [us]
+dilution_pref: non-dilutive   # non-dilutive | equity | convertible | debt | hybrid
+dual_use: dual-use            # pure-defense | dual-use | commercial
+trl: 4                        # technology readiness level, 1-9
+keywords: [prototype, innovation, r&d]
+mission: [national-security]

@@ -39,6 +39,14 @@ python -m dealflow forecast -p demos/02-saas-monthly/pipeline.yml \
 | 15 | [`15_large_pipeline_scale.py`](../demos/15_large_pipeline_scale.py) | Skeptics / QA | 60 deals through 5 open stages, asserting the engine's invariants hold at volume | `16-large-pipeline` |
 | 16 | [`16_error_handling.py`](../demos/16_error_handling.py) | Integrators | Each malformed input (bad pipeline, unknown stage, bad date, negative amount, missing column) raises a precise `DealflowError` | inline |
 | 17 | [`17_winrate_gate.py`](../demos/17_winrate_gate.py) | Finance / CI | The `--min-win-rate` gate fails a build on eroding quality, independent of the dollar forecast | `02-saas-monthly` |
+| 19 | [`19_capital_matchmaking.py`](../demos/19_capital_matchmaking.py) | Founders / capital raise | Explainable fit scoring — rank funding sources with a per-factor breakdown, not a black box | built-in taxonomy |
+| 20 | [`20_growth_stage_matching.py`](../demos/20_growth_stage_matching.py) | Growth-stage operators | The same engine on a Series B profile — the ranking inverts, proving it's profile-driven | built-in taxonomy |
+| 21 | [`21_capital_source_taxonomy.py`](../demos/21_capital_source_taxonomy.py) | Capital advisors | Browse the funding-vehicle taxonomy by category and merge a private fund over the seed | built-in taxonomy |
+| 22 | [`22_strategic_teaming.py`](../demos/22_strategic_teaming.py) | Capture managers | Assemble a compliant team covering an opportunity's requirements + set-aside goals, with rationale | `matchmaking/` |
+| 23 | [`23_teaming_gap_analysis.py`](../demos/23_teaming_gap_analysis.py) | BD leads | Bid / team / walk — the go/no-go signal from a coverage gap on a thin bench | inline |
+| 24 | [`24_capture_pipeline.py`](../demos/24_capture_pipeline.py) | BD / capture leads | Probability-weighted capture pipeline with staleness flags and next-action prompts | inline |
+| 25 | [`25_match_report_html.py`](../demos/25_match_report_html.py) | Anyone sharing results | Self-contained HTML match report + teaming brief (no JS/CDN) verified offline, plus CSV | built-in taxonomy |
+| 26 | [`26_teaming_graph_edges.py`](../demos/26_teaming_graph_edges.py) | Partnering leads | The teaming graph's complementary-capability edges — find partners before an opportunity lands | inline |
 
 Each narrated scenario rebuilds its result from a bundled sample, so they run in
 any order or on their own, fully offline. `tests/` covers the same code paths
