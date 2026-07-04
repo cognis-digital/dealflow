@@ -136,6 +136,27 @@ Pipeline-as-code: your forecast is a reproducible artifact in CI, so board decks
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
+**Capital-matchmaking + strategic-teaming engine** — the open, self-hostable
+answer to boutique "capital matchmaking" and "strategic teaming" advisory:
+
+- ✅ **Explainable fit scoring** (`match`) — rank capital sources against a
+  company/tech profile with a transparent, weighted **factor breakdown** (stage,
+  check size, sector thesis, geography, mandate, dilution, dual-use, TRL). Not a
+  black box: every score reconciles to named factors, each with a reason.
+- ✅ **Capital-source taxonomy** (`sources`) — an extensible catalog of funding
+  vehicles (SBIR/STTR, OTA prototype, APFIT, defense VC, strategic CVC,
+  In-Q-Tel-style, grants, project finance, venture debt) with size, dilution,
+  timeline, and fit heuristics. Merge your own private entries over the seed.
+- ✅ **Teaming graph** (`team`) — model primes/subs/small businesses, set-aside
+  status (8(a)/SDVOSB/HUBZone/WOSB), and complementary capabilities; recommend a
+  team that covers an opportunity's requirements with a **gap analysis**.
+- ✅ **Capture pipeline** (`pipeline`) — probability-weighted opportunity tracker
+  with stage playbooks, staleness flags, and next-action prompts.
+- ✅ **Self-contained reports** (`report`) — single-file HTML match reports and
+  teaming briefs (no JS, no CDN — open offline) plus CSV/JSON export.
+
+See **[docs/MATCHMAKING.md](docs/MATCHMAKING.md)** for the full guide.
+
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="quick-start"></a>
@@ -144,10 +165,20 @@ Pipeline-as-code: your forecast is a reproducible artifact in CI, so board decks
 ```bash
 pip install cognis-dealflow
 dealflow --version
+# --- historical forecast ---
 dealflow forecast -p pipeline.yml -d deals.csv                 # human table
 dealflow forecast -p pipeline.yml -d deals.csv --format json   # machine-readable
 dealflow forecast -p pipeline.yml -d deals.csv --format csv    # per-deal export
 dealflow forecast -p pipeline.yml -d deals.csv --min-forecast 100000  # CI gate
+
+# --- capital matchmaking + strategic teaming ---
+dealflow match  -c company.yml                         # rank funding sources by explainable fit
+dealflow match  -c company.yml --explain               # + full factor breakdown per source
+dealflow sources --category equity-vc                  # browse the capital-source taxonomy
+dealflow team   -o opportunity.yml -r roster.yml       # recommend a team + gap analysis
+dealflow pipeline -f pipeline.yml                      # opportunity/capture tracker
+dealflow report match -c company.yml -o match.html     # self-contained HTML report (no JS/CDN)
+dealflow report team  -o opportunity.yml -r roster.yml --out brief.html
 ```
 
 <div align="right"><a href="#top">↑ back to top</a></div>
@@ -207,6 +238,14 @@ PYTHONUTF8=1 python demos/02_revops_funnel.py   # or just one
 | [`03_bd_rep_deals.py`](demos/03_bd_rep_deals.py) | BD reps / AEs | Open-deal worklist ranked by expected value, plus stalled deals |
 | [`04_finance_ci_gate.py`](demos/04_finance_ci_gate.py) | Finance / forecasting | `--min-forecast` as a CI tripwire: gate passes (0) / fails the build (1) |
 | [`05_analyst_csv_export.py`](demos/05_analyst_csv_export.py) | Data analysts / BI | `--format csv` per-deal export, reconciled against the engine forecast |
+| [`19_capital_matchmaking.py`](demos/19_capital_matchmaking.py) | Founders / capital raise | Explainable fit scoring: rank funding sources with a factor breakdown |
+| [`20_growth_stage_matching.py`](demos/20_growth_stage_matching.py) | Growth-stage operators | Same engine, a Series B profile — the ranking inverts, driven by the profile |
+| [`21_capital_source_taxonomy.py`](demos/21_capital_source_taxonomy.py) | Capital advisors | Browse the funding-vehicle taxonomy and merge a private fund over the seed |
+| [`22_strategic_teaming.py`](demos/22_strategic_teaming.py) | Capture managers | Assemble a compliant team covering an opportunity + set-aside goals |
+| [`23_teaming_gap_analysis.py`](demos/23_teaming_gap_analysis.py) | BD leads | Bid / team / walk — the go/no-go signal from a coverage gap analysis |
+| [`24_capture_pipeline.py`](demos/24_capture_pipeline.py) | BD / capture leads | Probability-weighted pipeline + staleness flags + next-action prompts |
+| [`25_match_report_html.py`](demos/25_match_report_html.py) | Anyone sharing results | Self-contained HTML match report + teaming brief (no JS/CDN) + CSV |
+| [`26_teaming_graph_edges.py`](demos/26_teaming_graph_edges.py) | Partnering leads | The teaming graph's complementary-capability edges, opportunity-agnostic |
 
 The deal state machine each scenario walks:
 
@@ -281,6 +320,22 @@ flowchart LR
 | Open license | ✅ COCL | varies |
 
 *Built in the spirit of **dbt metrics layer crossed with Clari-style revenue forecasting**, re-framed the Cognis way. Missing a credit? Open a PR.*
+
+### Capital matchmaking + strategic teaming vs. boutique advisory
+
+The `match` / `sources` / `team` / `pipeline` / `report` engine is the open,
+self-hostable answer to fee-based "capital matchmaking" and "strategic teaming"
+advisory services that pair defense startups with funding and primes with subs:
+
+| | **Cognis dealflow** | Boutique matchmaking/teaming advisory |
+|---|:---:|:---:|
+| Self-hostable, you own the data | ✅ | ❌ |
+| Explainable score (factor breakdown, not a black box) | ✅ | ⚠️ opaque |
+| Extensible funding-vehicle taxonomy | ✅ | ❌ proprietary |
+| Teaming graph + set-aside-aware gap analysis | ✅ | ⚠️ manual |
+| Offline / air-gap friendly | ✅ | ❌ |
+| Runs in CI, scriptable, MCP-native | ✅ | ❌ |
+| Cost | ✅ open | 💰 retainer |
 
 <div align="right"><a href="#top">↑ back to top</a></div>
 

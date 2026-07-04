@@ -1,0 +1,32 @@
+# A roster of organizations available to team on the opportunity.
+roster:
+  - id: primeco
+    name: PrimeCo Systems
+    role: prime
+    capabilities: [systems-integration, radar, program-management]
+    past_performance: [dod-c2, army-radar]
+    clearance: secret
+  - id: edgeai
+    name: EdgeAI Labs
+    role: small-business
+    capabilities: [edge-ai, ml-ops]
+    set_asides: [sdvosb]
+    past_performance: [darpa-ai]
+    clearance: secret
+  - id: cybersb
+    name: CyberShield SB
+    role: small-business
+    capabilities: [cybersecurity, systems-integration]
+    set_asides: [8(a), hubzone]
+    past_performance: [dhs-cyber]
+  - id: logico
+    name: LogiCo
+    role: sub
+    capabilities: [logistics, supply-chain]
+    past_performance: [dla-logistics]
+  - id: radarworks
+    name: RadarWorks
+    role: sub
+    capabilities: [radar, rf-engineering]
+    set_asides: [wosb]
+    past_performance: [navy-radar]

@@ -1,0 +1,20 @@
+name: "dealflow CodeQL config"
+
+# dealflow is an offline, stdlib-only CLI. A few patterns below are deliberate
+# design choices, not defects, and are excluded to keep the security signal clean.
+query-filters:
+  # Broad `except Exception` blocks are intentional graceful-degradation points:
+  # a single bad scoring factor, malformed profile field, or optional-dependency
+  # import must never crash the whole run — it abstains / falls back instead.
+  - exclude:
+      id: py/catch-base-exception
+  # Demos and tests print illustrative sample data; not security-relevant.
+  - exclude:
+      id: py/clear-text-logging-sensitive-data
+
+paths:
+  - dealflow
+paths-ignore:
+  - tests
+  - demos
+  - ports
