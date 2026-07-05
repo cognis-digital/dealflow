@@ -17,8 +17,76 @@
 
 ```bash
 pip install cognis-dealflow
-dealflow scan .            # → prioritized findings in seconds
+dealflow forecast -p pipeline.yml -d deals.csv    # → weighted forecast in seconds
 ```
+
+## Install
+
+**Prerequisite:** Python 3.10+ ([python.org/downloads](https://www.python.org/downloads/)).
+
+The one-command installers below create a self-contained virtualenv (`.venv`) in
+the repo, install `dealflow` in editable mode with test deps, and verify the CLI.
+They are safe to re-run.
+
+<details open>
+<summary><b>Windows (PowerShell)</b></summary>
+
+```powershell
+git clone https://github.com/cognis-digital/dealflow.git
+cd dealflow
+.\install.ps1
+# then:
+.\.venv\Scripts\Activate.ps1     # activate (once per shell)
+dealflow --help
+```
+
+If activation is blocked, run once: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
+</details>
+
+<details>
+<summary><b>macOS</b></summary>
+
+```bash
+git clone https://github.com/cognis-digital/dealflow.git
+cd dealflow
+./install.sh
+# then:
+source .venv/bin/activate         # activate (once per shell)
+dealflow --help
+```
+</details>
+
+<details>
+<summary><b>Linux</b></summary>
+
+```bash
+git clone https://github.com/cognis-digital/dealflow.git
+cd dealflow
+./install.sh
+# then:
+source .venv/bin/activate         # activate (once per shell)
+dealflow --help
+```
+
+Prefer `make`? `make install && make test && make demo` does the same via the venv.
+</details>
+
+<details>
+<summary><b>Docker</b></summary>
+
+```bash
+git clone https://github.com/cognis-digital/dealflow.git
+cd dealflow
+docker build -t dealflow .
+# the image ENTRYPOINT is the CLI; pass args directly:
+docker run --rm dealflow --help
+# mount your data to forecast against it:
+docker run --rm -v "$PWD/demos/01-basic:/data" dealflow \
+    forecast -p /data/pipeline.yml -d /data/deals.csv
+```
+</details>
+
+**Install straight from PyPI (no clone):** `pip install cognis-dealflow` — then `dealflow --help`.
 
 
 <!-- cognis:example:start -->
